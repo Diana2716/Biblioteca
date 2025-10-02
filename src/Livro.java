@@ -3,72 +3,40 @@ public class Livro implements Emprestavel {
     private String codigoLivro;
     private String titulo;
     private String autor;
-    private String status;
+    private StatusLivro status;
     private Usuario usuarioEmprestimo;
 
     public Livro(String codigoLivro, String titulo, String autor){
         this.codigoLivro = codigoLivro;
-        this.status = "Disponivel";
         this.titulo = titulo;
         this.autor = autor;
+        this.status = StatusLivro.Disponivel;
         this.usuarioEmprestimo = null;
     }
 
-    public String getCodigoLivro() {
-        return codigoLivro;
-    }
+    public String getCodigoLivro() { return codigoLivro; }
+    public String getTitulo() { return titulo; }
+    public String getAutor() { return autor; }
+    public StatusLivro getStatus() { return status; }
+    public Usuario getUsuarioEmprestimo() { return usuarioEmprestimo; }
 
-    public void setCodigoLivro(String codigoLivro) {
-        this.codigoLivro = codigoLivro;
-    }
-
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
-
-    public String getAutor() {
-        return autor;
-    }
-
-    public void setAutor(String autor) {
-        this.autor = autor;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Usuario getUsuarioEmprestimo() {
-        return usuarioEmprestimo;
-    }
-
-    public void setUsuarioEmprestimo(Usuario usuarioEmprestimo) {
-        this.usuarioEmprestimo = usuarioEmprestimo;
-    }
-
-    public void emprestar() {
-        this.status = "EMPRESTADO";
-    }
-
-    public void devolver() {
-        this.status = "DISPONÍVEL";
-    }
+    private void mudarStatusEmprestado() { this.status = StatusLivro.Emprestado; }
+    private void mudarStatusDisponivel() { this.status = StatusLivro.Disponivel; }
 
     @Override
     public boolean emprestar(Usuario u) {
-        if (status.equals("DISPONÍVEL")) {
-            emprestar();
+        if (status == StatusLivro.Disponivel) {
+            this.usuarioEmprestimo = u;
+            mudarStatusEmprestado();
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void devolver() {
+        this.usuarioEmprestimo = null;
+        mudarStatusDisponivel();
     }
 
     @Override
